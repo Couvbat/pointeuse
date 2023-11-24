@@ -78,29 +78,41 @@ let Couches = ({ navigation }) => {
       >
         <View style={styles.modalView}>
           <View style={styles.modalItem}>
-            <Text style={styles.modalText}>Couche remplie de :</Text>
+            <Text style={styles.modalText}>Type de Timestamp :</Text>
             <View style={styles.row}>
             <Pressable
               onPress={() => {
-                setType("pipi");
+                setType("trajet");
               }}
             >
               <Icons
-                name="tint"
+                name="truck"
                 size={48}
-                color={type == "pipi" ? "yellow" : "black"}
+                color={type == "trajet" ? "green" : "black"}
               />
             </Pressable>
             <View style={styles.spacer}></View>
             <Pressable
               onPress={() => {
-                setType("caca");
+                setType("travaux");
               }}
             >
               <Icons
-                name="poop"
+                name="briefcase"
                 size={48}
-                color={type == "caca" ? "brown" : "black"}
+                color={type == "travaux" ? "brown" : "black"}
+              />
+              </Pressable>
+            <View style={styles.spacer}></View>
+              <Pressable
+              onPress={() => {
+                setType("pause");
+              }}
+            >
+              <Icons
+                name="pause-circle"
+                size={48}
+                color={type == "pause" ? "brown" : "black"}
               />
               </Pressable>
               </View>

@@ -62,11 +62,9 @@ let Home = ({ navigation }) => {
         }} />
       }
     >
-      <TimerTab
-        startTime={startTime}
-        isRunning={isRunning}
-      />
 
+  {data.isActive === 1 && <TimerTab startTime={startTime} isRunning={isRunning}/>}
+  
       {/* Row 1 */}
       <View style={styles.row}>
         <Pressable
@@ -75,8 +73,8 @@ let Home = ({ navigation }) => {
             navigation.navigate("Timestamps");
           }}
         >
-          <MaterialCommunityIcons
-            name="baby-bottle-outline"
+          <FAIcons
+            name="clock"
             size={48}
             color={"white"}
           />
@@ -86,15 +84,15 @@ let Home = ({ navigation }) => {
         <Pressable
           style={styles.box}
           onPress={() => {
-            navigation.navigate("Couches");
+            navigation.navigate("Days");
           }}
         >
-          <MaterialCommunityIcons
+          <Icons
             name="human-baby-changing-table"
             size={48}
             color={"white"}
           />
-          <Text style={styles.text}>Couches</Text>
+          <Text style={styles.text}>Journées</Text>
         </Pressable>
       </View>
 
@@ -103,57 +101,18 @@ let Home = ({ navigation }) => {
         <Pressable
           style={styles.box}
           onPress={() => {
-            navigation.navigate("Pots");
+            navigation.navigate("Months");
           }}
         >
           <MaterialCommunityIcons name="pot-mix" size={48} color={"white"} />
           <Text style={styles.text}>Pots</Text>
         </Pressable>
 
-        <Pressable
-          style={styles.box}
-          onPress={() => {
-            navigation.navigate("Bains");
-          }}
-        >
-          <FAIcons name="bathtub" size={48} color={"white"} />
-          <Text style={styles.text}>Bains</Text>
+        <Pressable style={styles.box}>
+          <Text style={styles.text}>4</Text>
         </Pressable>
       </View>
-
-      {/* Row 3 */}
-      <View style={styles.row}>
-        <Pressable style={styles.box}>
-          <Text style={styles.text}>5</Text>
-        </Pressable>
-
-        <Pressable style={styles.box}>
-          <Text style={styles.text}>6</Text>
-        </Pressable>
-      </View>
-
-      {/* Row 4 */}
-      <View style={styles.row}>
-        <Pressable style={styles.box}>
-          <Text style={styles.text}>7</Text>
-        </Pressable>
-
-        <Pressable style={styles.box}>
-          <Text style={styles.text}>8</Text>
-        </Pressable>
-      </View>
-
-      {/* Row 5 */}
-      <View style={styles.row}>
-        <Pressable style={styles.box}>
-          <Text style={styles.text}>9</Text>
-        </Pressable>
-
-        <Pressable style={styles.box}>
-          <Text style={styles.text}>10</Text>
-        </Pressable>
-      </View>
-
+      
       <StatusBar style="auto" />
     </ScrollView>
   );
