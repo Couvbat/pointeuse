@@ -5,7 +5,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://jhemery.xyz/api",
-  params: { api_token: "2RYFdCLENGNm8ZxpI7fWdowurm2LYeWbLDjuUwqQJHp591OeTsylSwpGyzNO9VKmA4wFIiU1pKEHd1yWwMaNnNuCFyErc2gMvQkT" },
+  params: { api_token: "KYmst3uRIR21aTyfm5XxRZxcoxRS28dHK5EDEWKlGRCSRsajYJWi7iJ919HEbn5BkthSnmGyIrAMRsZA63ViJv2MXfevgxDLbUxs" },
 });
 
 //Biberons
@@ -94,6 +94,31 @@ export function updateBain(id, data) {
 
 export function deleteBain(id) {
   return api.delete("/bain/" + id).then((res) => res.data.data);
+}
+
+//Timestamps
+export function getTimestamps() {
+  return api.get("/timestamp").then((res) => res.data.data);
+}
+
+export function getTimestamp(id) {
+  return api.get("/timestamp/" + id).then((res) => res.data.data);
+}
+
+export function getLastTimestamp() {
+  return api.get("/timestamp/last").then((res) => res.data.data[0]);
+}
+
+export function createTimestamp(data) {
+  return api.post("/timestamp", data).then((res) => res.data.data);
+}
+
+export function updateTimestamp(id, data) {
+  return api.patch("/timestamp/" + id, data).then((res) => res.data.data);
+}
+
+export function deleteTimestamp(id) {
+  return api.delete("/timestamp/" + id).then((res) => res.data.data);
 }
 
 //Profile

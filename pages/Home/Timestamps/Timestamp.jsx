@@ -15,6 +15,8 @@ import {
   formatDateTime,
   formatDate,
   formatTime,
+  convertDateFormat,
+  calculateDuration
 } from "../../../utils/dateFormating";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Icons from "react-native-vector-icons/FontAwesome5";
@@ -26,16 +28,19 @@ let Timestamp = ({ route, navigation }) => {
     {
       onSettled: (data) => {
         setType(data.type);
-        setDate(data.date);
-        setTime(data.time);
+        const formattedDate = convertDateFormat(data.created_at);
+        const dateParts = formattedDate.split(' ')[0].split('/');
+        const timeParts = formattedDate.split(' ')[1].split(':');
+        setDate(dateParts.join('/'));
+        setTime(timeParts.join(':'));
         setDateTimeOBJ(
           new Date(
-            parseInt(data.date.split("/")[2]),
-            parseInt(data.date.split("/")[1]) - 1,
-            parseInt(data.date.split("/")[0]),
-            parseInt(data.time.split(":")[0]),
-            parseInt(data.time.split(":")[1]),
-            parseInt(data.time.split(":")[2])
+            parseInt(dateParts[2]),
+            parseInt(dateParts[1]) - 1,
+            parseInt(dateParts[0]),
+            parseInt(timeParts[0]),
+            parseInt(timeParts[1]),
+            parseInt(timeParts[2])
           )
         );
       },
@@ -52,19 +57,19 @@ let Timestamp = ({ route, navigation }) => {
   const [time, setTime] = useState(Timestamp.time);
   const [dateTimeOBJ, setDateTimeOBJ] = useState();
 
-  const handleUpdateTimestamp = () => {
-    const dateTime = formatDateTime(date, time);
-    const newTimestamp = {
-      type: type,
-      date: date,
-      time: time,
-      dateTime: dateTime,
-      isActive: true,
-    };
-    updateTimestamp(Timestamp.id, newTimestamp);
-    setModalVisible(!modalVisible);
+  // const handleUpdateTimestamp = () => {
+  //   const dateTime = formatDateTime(date, time);
+  //   const newTimestamp = {
+  //     type: type,
+  //     date: date,
+  //     time: time,
+  //     dateTime: dateTime,
+  //     isActive: 0,
+  //   };
+  //   updateTimestamp(Timestamp.id, newTimestamp);
+  //   setModalVisible(!modalVisible);
 
-  };
+  // };
 
   const handleDeleteTimestamp = (id) => {
     Alert.alert(
@@ -193,18 +198,20 @@ let Timestamp = ({ route, navigation }) => {
       </Modal>
 
       <View style={styles.box}>
-        <Text style={styles.text}>Date : {Timestamp.date}</Text>
-        <Text style={styles.text}>Heure : {Timestamp.time}</Text>
         <Text style={styles.text}>Type : {Timestamp.type}</Text>
+        <Text style={styles.text}>Date : {convertDateFormat(Timestamp.created_at).split(' ')[0]}</Text>
+        <Text style={styles.text}>Heure début: {convertDateFormat(Timestamp.created_at).split(' ')[1]}</Text>
+        <Text style={styles.text}>Heure fin: {convertDateFormat(Timestamp.updated_at).split(' ')[1]}</Text>
+        <Text style={styles.text}>durée: {calculateDuration(Timestamp.created_at, Timestamp.updated_at)}</Text>
       </View>
-
+{/* 
       <Button
         title="Modifier"
         color="#56CBF9"
         onPress={() => {
           setModalVisible(true);
         }}
-      ></Button>
+      ></Button> */}
       <Button
         title="Supprimer"
         color="#984447"
@@ -239,7 +246,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 30,
-    marginVertical: 20,
+    marginVertical: 10,
     color: "#FFFFFF",
   },
   modalText: {

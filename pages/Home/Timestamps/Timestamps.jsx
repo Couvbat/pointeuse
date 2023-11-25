@@ -10,7 +10,7 @@ import {
   RefreshControl,
 } from "react-native";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { createCouche, getCouches } from "../../../utils/Api";
+import { createTimestamp, getTimestamps } from "../../../utils/Api";
 import {
   formatDate,
   formatTime,
@@ -19,9 +19,9 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Icons from "react-native-vector-icons/FontAwesome5"
 
-let Couches = ({ navigation }) => {
-  const { refetch, isLoading, error, data } = useQuery("Couches", () => getCouches());
-  const Couches = data || [];
+let Timestamps = ({ navigation }) => {
+  const { refetch, isLoading, error, data } = useQuery("Timestamps", () => getTimestamps());
+  const Timestamps = data || [];
 
   const [now, setNow] = useState();
 
@@ -34,18 +34,19 @@ let Couches = ({ navigation }) => {
   const [time, setTime] = useState();
 
   const handleDetails = (id) => {
-    navigation.navigate("Couche", { id: id });
+    navigation.navigate("Timestamp", { id: id });
   };
 
-  const handleAddCouche = () => {
+  const handleAddTimestamp = () => {
     const dateTime = formatDateTime(date, time);
-    const newCouche = {
+    const newTimestamp = {
       type: type,
       date: date,
       time: time,
       dateTime: dateTime,
+      isActive: '1',
     };
-    createCouche(newCouche);
+    createTimestamp(newTimestamp);
     setModalVisible(!modalVisible);
     setType("pipi");
     setDate();
@@ -100,7 +101,7 @@ let Couches = ({ navigation }) => {
               <Icons
                 name="briefcase"
                 size={48}
-                color={type == "travaux" ? "brown" : "black"}
+                color={type == "travaux" ? "green" : "black"}
               />
               </Pressable>
             <View style={styles.spacer}></View>
@@ -112,7 +113,7 @@ let Couches = ({ navigation }) => {
               <Icons
                 name="pause-circle"
                 size={48}
-                color={type == "pause" ? "brown" : "black"}
+                color={type == "pause" ? "green" : "black"}
               />
               </Pressable>
               </View>
@@ -144,14 +145,14 @@ let Couches = ({ navigation }) => {
             title="Ajouter"
             color="#17B890"
             onPress={() => {
-              handleAddCouche();
+              handleAddTimestamp();
             }}
           ></Button>
         </View>
       </Modal>
 
       <FlatList
-        data={Couches}
+        data={Timestamps}
         style={styles.list}
         renderItem={({ item }) => (
           <View style={styles.listItem}>
@@ -178,7 +179,7 @@ let Couches = ({ navigation }) => {
       ></FlatList>
 
       <Button
-        title="Ajouter une couche"
+        title="Ajouter une Timestamp"
         color="#17B890"
         onPress={() => {
           setModalVisible(true);
@@ -255,7 +256,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   spacer: {
-    width: 64,
+    width: 32,
   },
   row: {
     marginTop: 16,
@@ -268,4 +269,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Couches;
+export default Timestamps;

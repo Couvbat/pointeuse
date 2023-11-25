@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "pointeuse_1.0",
-    "slug": "pointeuse_1.0",
+    "name": "pointeuse",
+    "slug": "pointeuse",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.couvbat.pointeuse"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "95f544d7-0d34-4e33-942f-6834cdb3d407"
+      }
     }
   }
 }
