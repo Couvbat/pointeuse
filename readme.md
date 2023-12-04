@@ -40,6 +40,7 @@ J'utilises les packages Node suivants :
 
 - Pré-requis :
 
+  - Expo-cli
   - Node.js v20.9 (LTS)
   - React 18.2
   - React-native v0.72

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { useState, React } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import {
   Pressable,
@@ -25,40 +25,39 @@ import { getLastTimestamp, updateTimestamp } from "../../utils/Api";
 import Icons from "react-native-vector-icons/FontAwesome5"
 
 let Home = ({ navigation }) => {
-  const { refetch, isLoading } = useQuery("LastTimestamp", () =>
-    getLastTimestamp(),
-    {
-      onSettled: (data) => {
-        if (data){
-          setLastTimestamp(data);
-          handleStart(data);
-        }
-      },
-    }
-  );
 
-  const [startTime, setStartTime] = useState(0);
+  const { refetch, isLoading } = useQuery('LastTimestamp', getLastTimestamp, {
+    onSettled: (data) => {
+      console.log('Query settled with data:', data); // Add this for debugging
+      if (data) {
+        setLastTimestamp(data);
+        handleStart(data);
+      }
+    },
+  });
+  
+  const [elapsedTime, setElapsedTime] = useState();
   const [isRunning, setIsRunning] = useState(false);
   const [lastTimestamp, setLastTimestamp] = useState();
 
   const handleStart = (lastTimestamp) => {
-    if (lastTimestamp.isActive == 1) {
-      setStartTime(0);
-      const formattedDate = convertDateFormat(lastTimestamp.created_at);
-      const dateParts = formattedDate.split(' ')[0].split('/');
-      const timeParts = formattedDate.split(' ')[1].split(':');
-      const timestampDate = new Date(
-        parseInt(dateParts[0]),
-        parseInt(dateParts[1]) - 1,
-        parseInt(dateParts[2]),
-        parseInt(timeParts[0]),
-        parseInt(timeParts[1]),
-        parseInt(timeParts[2])
-      );
-      setStartTime(new Date().getTime() - timestampDate.getTime());
+    const isActive = lastTimestamp.isActive === "1";
+    console.log(`Is active: ${isActive}`);
+  
+    if (isActive) {
       setIsRunning(true);
+      
+      // Calculate the start time based on last timestamp's created_at
+      const createdAt = new Date(lastTimestamp.created_at);
+      const currentTime = new Date();
+      setElapsedTime(currentTime.getTime() - createdAt.getTime()); // time in ms between now and created_at
+      console.log('Starting timer with start time:', createdAt.toISOString());
+    } else {
+      setIsRunning(false);
+      console.log('No active timestamp or timestamp is not active.');
     }
   };
+
 
   const handleStopTimestamp = (lastTimestamp) => {
     const newTimestamp = {
@@ -69,7 +68,6 @@ let Home = ({ navigation }) => {
 
   const handleStop = () => {
     setIsRunning(false);
-    setStartTime(0);
   };
 
   return (
@@ -83,7 +81,7 @@ let Home = ({ navigation }) => {
       }
     >
 
-      {isRunning && <TimerTab startTime={startTime} isRunning={isRunning} />}
+      <TimerTab elapsedTime={elapsedTime} isRunning={isRunning} />
 
       {/* Row 1 */}
       <View style={styles.row}>
@@ -135,14 +133,14 @@ let Home = ({ navigation }) => {
 
       {/* Stop Button */}
       {isRunning &&
-          <Pressable
-            style={styles.stopButton}
-            onPress={() => {
-              handleStopTimestamp(lastTimestamp);
-              handleStop();
-            }}>
-            <Text style={styles.stop}>Stop</Text>
-          </Pressable>
+        <Pressable
+          style={styles.stopButton}
+          onPress={() => {
+            handleStopTimestamp(lastTimestamp);
+            handleStop();
+          }}>
+          <Text style={styles.stop}>Stop</Text>
+        </Pressable>
       }
 
 
