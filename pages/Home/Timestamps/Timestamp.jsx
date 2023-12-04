@@ -187,13 +187,13 @@ let Timestamp = ({ route, navigation }) => {
               onChange={handleTime}
             />
           )}
-          <Button
+          {/* <Button
             title="Modifier"
             color="#17B890"
             onPress={() => {
               handleUpdateTimestamp();
             }}
-          ></Button>
+          ></Button> */}
         </View>
       </Modal>
 
@@ -214,7 +214,7 @@ let Timestamp = ({ route, navigation }) => {
       ></Button> */}
       <Button
         title="Supprimer"
-        color="#984447"
+        color="#B30000"
         onPress={() => {
           handleDeleteTimestamp(Timestamp.id);
         }}

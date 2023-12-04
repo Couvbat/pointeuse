@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useStopwatch } from 'react-timer-hook';
-
-const padTime = (time) => String(time).padStart(2, '0');
+import { getLastTimestamp } from '../../utils/Api';
 
 export function TimerTab({ elapsedTime, isRunning }) {
   const {
@@ -13,28 +12,15 @@ export function TimerTab({ elapsedTime, isRunning }) {
     reset,
   } = useStopwatch({ autoStart: false });
 
-  useEffect(() => {
-    if (isRunning) {
-      // Only reset if elapsedTime changes
-      // Note: Add a check to ensure elapsedTime is not null
-      if (elapsedTime) {
-        reset(elapsedTime ? elapsedTime / 1000 : 0, elapsedTime !== undefined);
-        start();
-      }
-    } else {
-      reset();
-    }
-    // Remove lastTimestamp from the dependency array if not used
-  }, [isRunning, elapsedTime, reset, start]);
 
   return (
     <View style={styles.wrapper}>
-      {isRunning ? (
+      {isActive ? (
         <Text style={styles.text}>
-          Dernier Timestamp créé il y a : {padTime(hours)}:{padTime(minutes)}:{padTime(seconds)}
+          Dernier Timestamp créé il y a : }
         </Text>
       ) : (
-        <Text style={styles.loading}>Chargement...</Text>
+        <Text style={styles.loading}>Il n'y a aucun timestamp actif.</Text>
       )}
     </View>
   );
