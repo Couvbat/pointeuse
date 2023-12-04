@@ -59,9 +59,9 @@ J'utilises les packages Node suivants :
 
 ## TODO
 
-- [x] Créer les models/controllers/migrations/routes de l'API
-- [x] Créer un projet React Native
-- [x] Créer une interface basique
+- [x] ~~Créer les models/controllers/migrations/routes de l'API~~
+- [x] ~~Créer un projet React Native~~
+- [x] ~~Créer une interface basique~~
 - [ ] Stopwatch depuis le dernier pointage
 - [ ] Recap journées
 - [ ] Recap mois
