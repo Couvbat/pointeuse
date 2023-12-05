@@ -1,38 +1,42 @@
-import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { getLastTimestamp } from '../../utils/Api';
-import { useQuery } from 'react-query';
+import { useStopwatch } from 'react-timer-hook';
 
-const calculateElapsedTime = (timestamp) => {
-  const now = new Date();
-  const timestampMoment = new Date(timestamp);
-  return (now - timestampMoment).toLocaleString('fr', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false });
-}
+const TimerTab = ({ lastTimestamp }) => {
 
-const TimerTab = () => {
-  const [elapsedTime, setElapsedTime] = useState(0);
+  if (lastTimestamp === null || lastTimestamp === undefined || lastTimestamp.isActive == 0) {
+    return null
+  }
 
-  const { refetch } = useQuery('LastTimestamp', getLastTimestamp, {
-    onSettled: (data) => {
-      console.log('Query settled with data:', data); // Add this for debugging
-      if (data) {
-        setElapsedTime(calculateElapsedTime(data));
-      }
-    },
-  });
+  const elapsedTime = Math.floor((new Date().getTime() - new Date(lastTimestamp.created_at).getTime()) / 1000);
+  console.log(elapsedTime)
 
-  useEffect(() => {
-    refetch();
-    const interval = setInterval(refetch, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  function Stopwatch() {
+    const {
+      seconds,
+      minutes,
+      hours,
+      days,
+      isRunning,
+      start,
+      pause,
+      reset,
+    } = useStopwatch({ offsetTimestamp: new Date().setSeconds(new Date().getSeconds() + elapsedTime), autoStart: true });
+
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>Timestamp ({lastTimestamp.type}) actif depuis :</Text>
+        <Text style={styles.time}>{String(hours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}</Text>
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      <Text>{elapsedTime}</Text>
+    <View style={styles.box}>
+      <Stopwatch />
     </View>
+
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -40,25 +44,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-});
-
-export default TimerTab;
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <View style={styles.container}>
-      <Text>{elapsedTime}</Text>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  text: {
+    fontSize: 20,
+    color: 'white'
   },
+  time: {
+    fontSize: 36,
+    color: 'white'
+  },
+  box: {
+    flex: 1,
+    padding: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#8899AA",
+  }
 });
 
 export default TimerTab;

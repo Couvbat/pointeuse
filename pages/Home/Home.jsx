@@ -1,6 +1,5 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect, useRef } from "react";
-import { useFocusEffect } from "@react-navigation/native";
 import {
   Pressable,
   RefreshControl,
@@ -9,79 +8,36 @@ import {
   Text,
   View,
 } from "react-native";
-import {
-  MaterialCommunityIcons,
-  FontAwesome as FAIcons,
-} from "@expo/vector-icons";
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { TimerTab } from "../components/TimerTab";
-import {
-  formatDateTime,
-  formatDate,
-  formatTime,
-  convertDateFormat,
-} from "../../utils/dateFormating";
-import { getLastTimestamp, updateTimestamp } from "../../utils/Api";
+import TimerTab from "../components/TimerTab";
+import StopButton from "../components/StopButton";
+import { getLastTimestamp } from "../../utils/Api";
 import Icons from "react-native-vector-icons/FontAwesome5"
 
 let Home = ({ navigation }) => {
+
+  const [lastTimestamp, setLastTimestamp] = useState();
 
   const { refetch, isLoading } = useQuery('LastTimestamp', getLastTimestamp, {
     onSettled: (data) => {
       console.log('Query settled with data:', data); // Add this for debugging
       if (data) {
         setLastTimestamp(data);
-        handleStart(data);
       }
     },
   });
-  
-  const [elapsedTime, setElapsedTime] = useState();
-  const [isRunning, setIsRunning] = useState(false);
-  const [lastTimestamp, setLastTimestamp] = useState();
-
-  const handleStart = (lastTimestamp) => {
-    const isActive = lastTimestamp.isActive === "1";
-    console.log(`Is active: ${isActive}`);
-  
-    if (isActive) {
-      setIsRunning(true);
-      
-      // Calculate the start time based on last timestamp's created_at
-      const createdAt = new Date(lastTimestamp.created_at);
-      const currentTime = new Date();
-      setElapsedTime(currentTime.getTime() - createdAt.getTime()); // time in ms between now and created_at
-      console.log('Starting timer with start time:', createdAt.toISOString());
-    } else {
-      setIsRunning(false);
-      console.log('No active timestamp or timestamp is not active.');
-    }
-  };
-
-
-  const handleStopTimestamp = (lastTimestamp) => {
-    const newTimestamp = {
-      isActive: false,
-    };
-    updateTimestamp(lastTimestamp.id, newTimestamp);
-  };
-
-  const handleStop = () => {
-    setIsRunning(false);
-  };
 
   return (
     <ScrollView
       style={styles.container}
       refreshControl={
         <RefreshControl refreshing={isLoading} onRefresh={() => {
-          handleStop();
           refetch();
         }} />
       }
     >
 
-      <TimerTab elapsedTime={elapsedTime} isRunning={isRunning} />
+      <TimerTab lastTimestamp={lastTimestamp} />
 
       {/* Row 1 */}
       <View style={styles.row}>
@@ -125,24 +81,10 @@ let Home = ({ navigation }) => {
           <Icons name="calendar-alt" size={48} color={"white"} />
           <Text style={styles.text}>Mois</Text>
         </Pressable>
-
-        <Pressable style={styles.box}>
-          <Text style={styles.text}>4</Text>
-        </Pressable>
       </View>
 
       {/* Stop Button */}
-      {isRunning &&
-        <Pressable
-          style={styles.stopButton}
-          onPress={() => {
-            handleStopTimestamp(lastTimestamp);
-            handleStop();
-          }}>
-          <Text style={styles.stop}>Stop</Text>
-        </Pressable>
-      }
-
+      <StopButton lastTimestamp={lastTimestamp} />
 
       <StatusBar style="auto" />
 
