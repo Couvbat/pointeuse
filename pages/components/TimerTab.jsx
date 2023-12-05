@@ -1,54 +1,64 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useStopwatch } from 'react-timer-hook';
 import { getLastTimestamp } from '../../utils/Api';
+import { useQuery } from 'react-query';
 
-export function TimerTab({ elapsedTime, isRunning }) {
-  const {
-    seconds,
-    minutes,
-    hours,
-    start,
-    reset,
-  } = useStopwatch({ autoStart: false });
+const calculateElapsedTime = (timestamp) => {
+  const now = new Date();
+  const timestampMoment = new Date(timestamp);
+  return (now - timestampMoment).toLocaleString('fr', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false });
+}
 
+const TimerTab = () => {
+  const [elapsedTime, setElapsedTime] = useState(0);
+
+  const { refetch } = useQuery('LastTimestamp', getLastTimestamp, {
+    onSettled: (data) => {
+      console.log('Query settled with data:', data); // Add this for debugging
+      if (data) {
+        setElapsedTime(calculateElapsedTime(data));
+      }
+    },
+  });
+
+  useEffect(() => {
+    refetch();
+    const interval = setInterval(refetch, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <View style={styles.wrapper}>
-      {isActive ? (
-        <Text style={styles.text}>
-          Dernier Timestamp créé il y a : }
-        </Text>
-      ) : (
-        <Text style={styles.loading}>Il n'y a aucun timestamp actif.</Text>
-      )}
+    <View style={styles.container}>
+      <Text>{elapsedTime}</Text>
     </View>
   );
 }
 
-
 const styles = StyleSheet.create({
-  wrapper: {
-    height: 64,
-    justifyContent: "center",
-    backgroundColor: "#8899AA",
-  },
-  text: {
-    fontSize: 20,
-    alignSelf: "center",
-    color: "white",
-  },
-  loading: {
-    color: "white",
-    fontSize: 20,
-    textAlign: "center",
-    marginVertical:"auto",
-  },
-  stopwatch: {
-    text: {
-      fontSize: 20,
-      alignSelf: "center",
-      color: "white",
-    },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
+
+export default TimerTab;
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <View style={styles.container}>
+      <Text>{elapsedTime}</Text>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
+
+export default TimerTab;
