@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import {
   Pressable,
   RefreshControl,
@@ -8,7 +8,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import TimerTab from "../components/TimerTab";
 import StopButton from "../components/StopButton";
 import { getLastTimestamp } from "../../utils/Api";
@@ -17,15 +17,20 @@ import Icons from "react-native-vector-icons/FontAwesome5"
 let Home = ({ navigation }) => {
 
   const [lastTimestamp, setLastTimestamp] = useState();
+  const [isRunning, setIsRunning] = useState(false);
 
   const { refetch, isLoading } = useQuery('LastTimestamp', getLastTimestamp, {
     onSettled: (data) => {
       console.log('Query settled with data:', data); // Add this for debugging
       if (data) {
         setLastTimestamp(data);
+        if (lastTimestamp && lastTimestamp.isActive == 1) {
+          setIsRunning(true);
+        }
       }
     },
   });
+
 
   return (
     <ScrollView
@@ -36,8 +41,10 @@ let Home = ({ navigation }) => {
         }} />
       }
     >
-
-      <TimerTab lastTimestamp={lastTimestamp} />
+      {/* Timer Tab */}
+      {isRunning &&
+        <TimerTab lastTimestamp={lastTimestamp} />
+      }
 
       {/* Row 1 */}
       <View style={styles.row}>
@@ -84,7 +91,9 @@ let Home = ({ navigation }) => {
       </View>
 
       {/* Stop Button */}
-      <StopButton lastTimestamp={lastTimestamp} />
+      {isRunning &&
+        <StopButton lastTimestamp={lastTimestamp} setIsRunning={setIsRunning}/>
+      }
 
       <StatusBar style="auto" />
 

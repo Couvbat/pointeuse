@@ -3,12 +3,7 @@ import { StyleSheet, View, Text, Pressable } from "react-native";
 import { getLastTimestamp, updateTimestamp } from "../../utils/Api";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
-const StopButton = ({ lastTimestamp }) => {
-  if (lastTimestamp === null || lastTimestamp === undefined || lastTimestamp.isActive == 0) {
-    return null;
-  }
-
-  const [isRunning, setIsRunning] = useState(true);
+const StopButton = ({ lastTimestamp, setIsRunning }) => {
 
   const handleStop = () => {
     updateTimestamp(lastTimestamp.id, { isActive: false });
@@ -18,11 +13,9 @@ const StopButton = ({ lastTimestamp }) => {
 
   return (
     <View style={styles.container}>
-      {isRunning ? (
         <Pressable style={styles.buttonStop} onPress={handleStop}>
           <Text style={styles.text}>Stop</Text>
         </Pressable>
-      ) : null}
     </View>
   )
 };
