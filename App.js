@@ -20,7 +20,7 @@ function HomeStackScreen() {
     <HomeStack.Navigator
       screenOptions={{
         headerTintColor: "white",
-        headerStyle: { backgroundColor: "#333D48" },
+        headerStyle: { backgroundColor: "#323264" },
       }}>
       <HomeStack.Screen name="Acceuil" component={Home}/>
 
@@ -40,7 +40,7 @@ function SettingsStackScreen() {
     <SettingsStack.Navigator
       screenOptions={{
         headerTintColor: "white",
-        headerStyle: { backgroundColor: "#333D48" },
+        headerStyle: { backgroundColor: "#323264" },
       }}>
       <SettingsStack.Screen name="Settings" component={Settings} />
     </SettingsStack.Navigator>
@@ -56,10 +56,10 @@ export default function App() {
         <Tab.Navigator
           initialRouteName="Home"
           screenOptions={{
-            tabBarActiveTintColor: "pink",
-            tabBarInactiveTintColor: "white",
-            tabBarActiveBackgroundColor: '#333D48',
-            tabBarInactiveBackgroundColor: '#333D48',
+            tabBarActiveTintColor: "white",
+            tabBarInactiveTintColor: "grey",
+            tabBarActiveBackgroundColor: '#323264',
+            tabBarInactiveBackgroundColor: '#323264',
           }}
         >
           <Tab.Screen

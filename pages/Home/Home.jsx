@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Pressable,
   RefreshControl,
@@ -18,6 +18,8 @@ let Home = ({ navigation }) => {
 
   const [lastTimestamp, setLastTimestamp] = useState();
   const [isRunning, setIsRunning] = useState(false);
+
+  useEffect(() => { }, []);
 
   const { refetch, isLoading } = useQuery('LastTimestamp', getLastTimestamp, {
     onSettled: (data) => {
@@ -104,7 +106,7 @@ let Home = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#495867",
+    backgroundColor: "#323264",
   },
   text: {
     fontSize: 24,
@@ -123,7 +125,7 @@ const styles = StyleSheet.create({
     height: 128,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#8899AA",
+    backgroundColor: "#46468C",
     padding: 10,
     margin: 10,
     borderRadius: 10,

@@ -98,7 +98,7 @@ let Timestamps = ({ navigation }) => {
                 <Icons
                   name="truck"
                   size={48}
-                  color={type == "trajet" ? "green" : "black"}
+                  color={type == "trajet" ? "#5555AA" : "black"}
                 />
               </Pressable>
               <View style={styles.spacer}></View>
@@ -110,7 +110,7 @@ let Timestamps = ({ navigation }) => {
                 <Icons
                   name="briefcase"
                   size={48}
-                  color={type == "travaux" ? "green" : "black"}
+                  color={type == "travaux" ? "#5555AA" : "black"}
                 />
               </Pressable>
               <View style={styles.spacer}></View>
@@ -122,7 +122,7 @@ let Timestamps = ({ navigation }) => {
                 <Icons
                   name="pause-circle"
                   size={48}
-                  color={type == "pause" ? "green" : "black"}
+                  color={type == "pause" ? "#5555AA" : "black"}
                 />
               </Pressable>
             </View>
@@ -207,7 +207,7 @@ let Timestamps = ({ navigation }) => {
       ></FlatList>
 
       <Button
-        title="Ajouter une Timestamp"
+        title="Ajouter un Timestamp"
         color="#17B890"
         onPress={() => {
           setModalVisible(true);
@@ -223,7 +223,7 @@ let Timestamps = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#495867",
+    backgroundColor: "#323264",
   },
   loading: {
     color: "white",
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listItem: {
-    backgroundColor: "#8899AA",
+    backgroundColor: "#46468C",
     margin: 8,
     padding: 20,
     borderRadius: 10,
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   ActiveItem: {
-    backgroundColor: "#00aa00",
+    backgroundColor: "#5555AA",
     margin: 8,
     padding: 20,
     borderRadius: 10,
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "#495867",
+    backgroundColor: "#323264",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
   },
   modalItem: {
     width: "100%",
-    backgroundColor: "#8899AA",
+    backgroundColor: "#46468C",
     margin: 8,
     padding: 8,
     borderRadius: 10,
