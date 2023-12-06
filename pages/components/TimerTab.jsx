@@ -4,7 +4,6 @@ import { useStopwatch } from 'react-timer-hook';
 const TimerTab = ({ lastTimestamp }) => {
 
   const elapsedTime = Math.floor((new Date().getTime() - new Date(lastTimestamp.created_at).getTime()) / 1000);
-  console.log(elapsedTime)
 
   function Stopwatch() {
     const {

@@ -19,8 +19,6 @@ let Home = ({ navigation }) => {
   const [lastTimestamp, setLastTimestamp] = useState();
   const [isRunning, setIsRunning] = useState(false);
 
-  useEffect(() => { }, []);
-
   const { refetch, isLoading } = useQuery('LastTimestamp', getLastTimestamp, {
     onSettled: (data) => {
       console.log('Query settled with data:', data); // Add this for debugging
@@ -94,7 +92,7 @@ let Home = ({ navigation }) => {
 
       {/* Stop Button */}
       {isRunning &&
-        <StopButton lastTimestamp={lastTimestamp} setIsRunning={setIsRunning}/>
+        <StopButton lastTimestamp={lastTimestamp} setIsRunning={setIsRunning} />
       }
 
       <StatusBar style="auto" />
