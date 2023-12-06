@@ -19,7 +19,7 @@ import {
   calculateDuration
 } from "../../../utils/dateFormating";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import Icons from "react-native-vector-icons/FontAwesome5";
+import Icons from '@expo/vector-icons/FontAwesome5';
 
 let Timestamp = ({ route, navigation }) => {
   const { isLoading, error, data } = useQuery(

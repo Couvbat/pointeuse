@@ -2,8 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { QueryClient, QueryClientProvider } from "react-query";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import FAIcons from "react-native-vector-icons/FontAwesome";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 
 const queryClient = new QueryClient();
 

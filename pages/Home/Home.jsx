@@ -12,7 +12,7 @@ import { useQuery } from "react-query";
 import TimerTab from "../components/TimerTab";
 import StopButton from "../components/StopButton";
 import { getLastTimestamp } from "../../utils/Api";
-import Icons from "react-native-vector-icons/FontAwesome5"
+import Icons from '@expo/vector-icons/FontAwesome5';
 
 let Home = ({ navigation }) => {
 
