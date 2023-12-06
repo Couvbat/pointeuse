@@ -1,41 +1,32 @@
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 import { useStopwatch } from 'react-timer-hook';
 
 const TimerTab = ({ lastTimestamp }) => {
-
-  if (lastTimestamp.isActive == 0 ) {
-    return null
+  // If the last timestamp is not active, don't display the timer
+  if (!lastTimestamp || lastTimestamp.isActive === 0) {
+    return null;
   }
 
-  const elapsedTime = Math.floor((new Date().getTime() - new Date(lastTimestamp.created_at).getTime()) / 1000);
+    // Calculate the elapsed time in seconds between now and the created_at timestamp
+    const elapsedTime = new Date() - new Date(lastTimestamp.created_at);
 
-  function Stopwatch() {
-    const {
-      seconds,
-      minutes,
-      hours,
-      days,
-      isRunning,
-      start,
-      pause,
-      reset,
-    } = useStopwatch({ offsetTimestamp: new Date().setSeconds(new Date().getSeconds() + elapsedTime), autoStart: true });
+    // Initialize the stopwatch using an offset
+    const { seconds, minutes, hours } = useStopwatch({
+      offsetTimestamp: new Date(new Date().getTime() + elapsedTime),
+      autoStart: true
+    });
 
-    return (
+  return (
+    <View style={styles.box}>
       <View style={styles.container}>
         <Text style={styles.text}>Timestamp ({lastTimestamp.type}) actif depuis :</Text>
         <Text style={styles.time}>{String(hours).padStart(2, '0')}:{String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}</Text>
       </View>
-    );
-  }
-
-  return (
-    <View style={styles.box}>
-      <Stopwatch />
     </View>
-
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

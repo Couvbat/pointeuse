@@ -19,12 +19,12 @@ let Home = ({ navigation }) => {
   const [lastTimestamp, setLastTimestamp] = useState();
   const [isRunning, setIsRunning] = useState(false);
 
-  const { refetch, isLoading } = useQuery('LastTimestamp', getLastTimestamp, {
+  const { refetch, isFetching } = useQuery('LastTimestamp', getLastTimestamp, {
     onSettled: (data) => {
       console.log('Query settled with data:', data); // Add this for debugging
       if (data) {
         setLastTimestamp(data);
-        if (lastTimestamp && lastTimestamp.isActive == 1) {
+        if (data.isActive == 1) {
           setIsRunning(true);
         }
       }
@@ -36,7 +36,7 @@ let Home = ({ navigation }) => {
     <ScrollView
       style={styles.container}
       refreshControl={
-        <RefreshControl refreshing={isLoading} onRefresh={() => {
+        <RefreshControl refreshing={isFetching} onRefresh={() => {
           refetch();
         }} />
       }

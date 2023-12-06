@@ -22,7 +22,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Icons from '@expo/vector-icons/FontAwesome5';
 
 let Timestamp = ({ route, navigation }) => {
-  const { isLoading, error, data } = useQuery(
+
+  const { isFetching, error, data } = useQuery(
     "Timestamp",
     () => getTimestamp(route.params.id),
     {
@@ -57,20 +58,6 @@ let Timestamp = ({ route, navigation }) => {
   const [time, setTime] = useState(Timestamp.time);
   const [dateTimeOBJ, setDateTimeOBJ] = useState();
 
-  // const handleUpdateTimestamp = () => {
-  //   const dateTime = formatDateTime(date, time);
-  //   const newTimestamp = {
-  //     type: type,
-  //     date: date,
-  //     time: time,
-  //     dateTime: dateTime,
-  //     isActive: 0,
-  //   };
-  //   updateTimestamp(Timestamp.id, newTimestamp);
-  //   setModalVisible(!modalVisible);
-
-  // };
-
   const handleDeleteTimestamp = (id) => {
     Alert.alert(
       "Supprimer le Timestamp",
@@ -103,7 +90,7 @@ let Timestamp = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      {isLoading && <Text style={styles.loading}>Chargement...</Text>}
+      {isFetching && <Text style={styles.loading}>Chargement...</Text>}
 
       {error && <Text>Error: {error.message}</Text>}
 
@@ -187,13 +174,6 @@ let Timestamp = ({ route, navigation }) => {
               onChange={handleTime}
             />
           )}
-          {/* <Button
-            title="Modifier"
-            color="#17B890"
-            onPress={() => {
-              handleUpdateTimestamp();
-            }}
-          ></Button> */}
         </View>
       </Modal>
 
@@ -204,14 +184,7 @@ let Timestamp = ({ route, navigation }) => {
         <Text style={styles.text}>Heure fin: {convertDateFormat(Timestamp.updated_at).split(' ')[1]}</Text>
         <Text style={styles.text}>durée: {calculateDuration(Timestamp.created_at, Timestamp.updated_at)}</Text>
       </View>
-{/* 
-      <Button
-        title="Modifier"
-        color="#56CBF9"
-        onPress={() => {
-          setModalVisible(true);
-        }}
-      ></Button> */}
+
       <Button
         title="Supprimer"
         color="#B30000"
@@ -226,13 +199,13 @@ let Timestamp = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#495867",
+    backgroundColor: "#323264",
   },
   box: {
     flex: 1,
     marginVertical: 150,
     marginHorizontal: 25,
-    backgroundColor: "#8899AA",
+    backgroundColor: "#46468C",
     borderRadius: 20,
     padding: 10,
     justifyContent: "center",
@@ -255,7 +228,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "#495867",
+    backgroundColor: "#323264",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
@@ -271,7 +244,7 @@ const styles = StyleSheet.create({
   },
   modalItem: {
     width: "100%",
-    backgroundColor: "#8899AA",
+    backgroundColor: "#46468C",
     margin: 8,
     padding: 8,
     borderRadius: 10,

@@ -14,16 +14,26 @@ export function formatTime(timeObj) {
   return timeObj.toLocaleTimeString();
 }
 
-export function formatDateTime(date, time) {
-  let day = date.split("/")[0];
-  let month = date.split("/")[1];
-    if(day.length == 1){
-      day = `0${day}`;
-  }
-    if (month.length == 1) {
-    month = `0${month}`;
-  }
-  return (date.split("/")[2] + "/" + month + "/" + day + " " + time.split(":")[0] + ":" + time.split(":")[1] + time.split(":")[2]);
+// Keep formatDate and formatTime function the same
+
+// Add two new functions that take a dateTimeObj and format them
+export function formatDateTimeAsDate(dateTimeObj) {
+  return formatDate(dateTimeObj);
+}
+
+export function formatDateTimeAsTime(dateTimeObj) {
+  return formatTime(dateTimeObj);
+}
+
+// Revised formatDateTime to accept a Date object and format it
+export function formatDateTime(dateTimeObj) {
+  const day = ("0" + dateTimeObj.getDate()).slice(-2);
+  const month = ("0" + (dateTimeObj.getMonth() + 1)).slice(-2);
+  const year = dateTimeObj.getFullYear();
+  const hours = ("0" + dateTimeObj.getHours()).slice(-2);
+  const minutes = ("0" + dateTimeObj.getMinutes()).slice(-2);
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
 }
 
 export function convertDateFormat(dateString) {

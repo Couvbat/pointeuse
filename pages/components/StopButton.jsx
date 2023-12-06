@@ -4,20 +4,31 @@ import { getLastTimestamp, updateTimestamp } from "../../utils/Api";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 const StopButton = ({ lastTimestamp, setIsRunning }) => {
+  const queryClient = useQueryClient();
 
-  const handleStop = () => {
-    updateTimestamp(lastTimestamp.id, { isActive: false });
-    setIsRunning(false);
-    console.log('stop')
-  };
+  const mutation = useMutation(() => updateTimestamp(lastTimestamp.id, { isActive: false }), {
+    onSuccess: () => {
+      // Invalidate and refetch queries after the mutation succeeds
+      queryClient.invalidateQueries('LastTimestamp');
+      setIsRunning(false);
+    },
+    onError: (error) => {
+      console.log('Error updating timestamp:', error);
+    },
+  });
 
   return (
     <View style={styles.container}>
-        <Pressable style={styles.buttonStop} onPress={handleStop}>
-          <Text style={styles.text}>Stop</Text>
-        </Pressable>
+      <Pressable
+        style={styles.buttonStop}
+        // Disable the button when the mutation is in progress
+        onPress={() => mutation.mutate()}
+        disabled={mutation.isLoading}
+      >
+        <Text style={styles.text}>Stop</Text>
+      </Pressable>
     </View>
-  )
+  );
 };
 
 const styles = StyleSheet.create({

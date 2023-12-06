@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://jhemery.xyz/api",
-  params: { api_token: "hQomqOzgQSZ8i4v5JhlhJO4EjCEandAkjju5KN4AJEO9ba2lP8LX4qzyIO0hv2u4PaxuGRkHvlzGeAjuj9XD4RXGE0cUyUK2rP0h" },
+  params: { api_token: "5kRKw5UaRVuxCl8qjNSrT2PeQ5RRka3nFhILKtjCuCXUt5M5775oqjVao00guMMqnrsOvIbHDQAhBAAHk2xgEN9c7XSn2wgpcz5u" },
 });
 
 //Timestamps
