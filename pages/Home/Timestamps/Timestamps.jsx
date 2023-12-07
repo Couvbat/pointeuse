@@ -99,7 +99,46 @@ let Timestamps = ({ navigation }) => {
         onRequestClose={toggleModal}
       >
         <View style={styles.modalView}>
-          {/* Rest of modal content */}
+        <View style={styles.modalItem}>
+            <Text style={styles.modalText}>Type de Timestamp :</Text>
+            <View style={styles.row}>
+              <Pressable
+                onPress={() => {
+                  setType("trajet");
+                }}
+              >
+                <Icons
+                  name="truck"
+                  size={48}
+                  color={type == "trajet" ? "#5555AA" : "black"}
+                />
+              </Pressable>
+              <View style={styles.spacer}></View>
+              <Pressable
+                onPress={() => {
+                  setType("travaux");
+                }}
+              >
+                <Icons
+                  name="briefcase"
+                  size={48}
+                  color={type == "travaux" ? "#5555AA" : "black"}
+                />
+              </Pressable>
+              <View style={styles.spacer}></View>
+              <Pressable
+                onPress={() => {
+                  setType("pause");
+                }}
+              >
+                <Icons
+                  name="pause-circle"
+                  size={48}
+                  color={type == "pause" ? "#5555AA" : "black"}
+                />
+              </Pressable>
+            </View>
+          </View>
           {/* Date Picker */}
           <Pressable
             style={styles.modalItem}
@@ -147,7 +186,7 @@ let Timestamps = ({ navigation }) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <Pressable
-            style={item.isActive === 1 ? styles.activeItem : styles.listItem}
+            style={item.isActive == "1" ? styles.activeItem : styles.listItem}
             onPress={() => navigation.navigate("Timestamp", { id: item.id })}
           >
             <Text style={styles.text}>
@@ -202,7 +241,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 8,
   },
-  ActiveItem: {
+  activeItem: {
     backgroundColor: "#5555AA",
     margin: 8,
     padding: 20,

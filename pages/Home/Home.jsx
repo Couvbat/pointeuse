@@ -70,6 +70,7 @@ let Home = ({ navigation }) => {
         >
           <Icons name="calendar-alt" size={48} color={"white"} />
           <Text style={styles.text}>Calendrier</Text>
+        </Pressable>
       </View>
 
       {/* Stop Button */}

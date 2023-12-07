@@ -9,7 +9,7 @@ const queryClient = new QueryClient();
 import Home from "./pages/Home/Home";
 import Timestamps from "./pages/Home/Timestamps/Timestamps";
 import Timestamp from "./pages/Home/Timestamps/Timestamp";
-import Days from "./pages/Home/Days/Days";
+import Calendar from "./pages/Home/Calendar/Calendar";
 
 
 const HomeStack = createStackNavigator();
@@ -24,7 +24,7 @@ function HomeStackScreen() {
 
       <HomeStack.Screen name="Timestamps" component={Timestamps} />
       <HomeStack.Screen name="Timestamp" component={Timestamp} />
-      <HomeStack.Screen name="Days" component={Days} />
+      <HomeStack.Screen name="Calendar" component={Calendar} />
     </HomeStack.Navigator>
   );
 }
