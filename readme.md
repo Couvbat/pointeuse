@@ -35,6 +35,7 @@ J'utilises les packages Node suivants :
   - React-Query avec Axios (pour gérer les requêtes api)
   - React-icons (pour les icônes)
   - React-native-date-picker (pour des calendriers)
+  - React-timer-hook (pour le timer)
 
 ## Installation
 
@@ -43,7 +44,7 @@ J'utilises les packages Node suivants :
   - Expo-cli
   - Node.js v20.9 (LTS)
   - React 18.2
-  - React-native v0.72
+  - React-native v0.73
 
 - Installation de l'application sur machine locale :
   1. Clone le projet sur votre machine

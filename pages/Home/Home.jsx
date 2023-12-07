@@ -65,29 +65,11 @@ let Home = ({ navigation }) => {
         <Pressable
           style={styles.box}
           onPress={() => {
-            navigation.navigate("Days");
-          }}
-        >
-          <Icons
-            name="calendar-day"
-            size={48}
-            color={"white"}
-          />
-          <Text style={styles.text}>Journées</Text>
-        </Pressable>
-      </View>
-
-      {/* Row 2 */}
-      <View style={styles.row}>
-        <Pressable
-          style={styles.box}
-          onPress={() => {
-            navigation.navigate("Months");
+            navigation.navigate("Calendar");
           }}
         >
           <Icons name="calendar-alt" size={48} color={"white"} />
-          <Text style={styles.text}>Mois</Text>
-        </Pressable>
+          <Text style={styles.text}>Calendrier</Text>
       </View>
 
       {/* Stop Button */}
