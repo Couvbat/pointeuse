@@ -7,6 +7,13 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Icons from '@expo/vector-icons/FontAwesome5';
 import { useFocusEffect } from '@react-navigation/native';
 
+/**
+ * Renders a component for displaying and managing timestamps.
+ *
+ * @component
+ * @param {Object} navigation - The navigation object for navigating between screens.
+ * @returns {JSX.Element} The Timestamps component.
+ */
 let Timestamps = ({ navigation }) => {
   const queryClient = useQueryClient();
 
@@ -192,7 +199,7 @@ let Timestamps = ({ navigation }) => {
         renderItem={({ item }) => (
           <Pressable
             style={item.isActive == "1" ? styles.activeItem : styles.listItem}
-            onPress={() => navigation.navigate("Timestamp", { id: item.id })}
+            onPress={() => navigation.navigate("Details", { id: item.id })}
           >
             <Text style={styles.text}>
               {item.dateTime} : {item.type}

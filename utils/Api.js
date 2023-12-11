@@ -18,6 +18,10 @@ export function getLastTimestamp() {
   return api.get("/timestamp/last").then((res) => res.data.data[0]);
 }
 
+export function getTimestampsByDate(date) {
+  return api.get("/timestamps/date/" + date).then((res) => res.data.data);
+}
+
 export function createTimestamp(data) {
   return api.post("/timestamp", data).then((res) => res.data.data);
 }

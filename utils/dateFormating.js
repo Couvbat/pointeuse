@@ -63,3 +63,11 @@ export function calculateDuration(start, end) {
 
   return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 };
+
+export function formatCalendarDate(date) {
+  const year = date.getFullYear();
+  const month = ("0" + (date.getMonth() + 1)).slice(-2); // Months are 0 based
+  const day = ("0" + date.getDate()).slice(-2);
+
+  return `${year}-${month}-${day}`;
+}

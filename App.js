@@ -8,8 +8,8 @@ const queryClient = new QueryClient();
 
 import Home from "./pages/Home/Home";
 import Timestamps from "./pages/Home/Timestamps/Timestamps";
-import Timestamp from "./pages/Home/Timestamps/Timestamp";
-import Calendar from "./pages/Home/Calendar/Calendar";
+import Details from "./pages/Home/Timestamps/Details";
+import Calendrier from "./pages/Home/Calendrier/Calendrier";
 
 
 const HomeStack = createStackNavigator();
@@ -23,8 +23,8 @@ function HomeStackScreen() {
       <HomeStack.Screen name="Acceuil" component={Home}/>
 
       <HomeStack.Screen name="Timestamps" component={Timestamps} />
-      <HomeStack.Screen name="Timestamp" component={Timestamp} />
-      <HomeStack.Screen name="Calendar" component={Calendar} />
+      <HomeStack.Screen name="Details" component={Details} />
+      <HomeStack.Screen name="Calendrier" component={Calendrier} />
     </HomeStack.Navigator>
   );
 }

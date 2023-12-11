@@ -15,6 +15,12 @@ import { getLastTimestamp } from "../../utils/Api";
 import Icons from '@expo/vector-icons/FontAwesome5';
 import { useFocusEffect } from '@react-navigation/native';
 
+/**
+ * Renders the Home component.
+ * 
+ * @param {object} navigation - The navigation object.
+ * @returns {JSX.Element} The rendered Home component.
+ */
 let Home = ({ navigation }) => {
   const queryClient = useQueryClient();
 
@@ -75,7 +81,7 @@ let Home = ({ navigation }) => {
         <Pressable
           style={styles.box}
           onPress={() => {
-            navigation.navigate("Calendar");
+            navigation.navigate("Calendrier");
           }}
         >
           <Icons name="calendar-alt" size={48} color={"white"} />
@@ -89,7 +95,6 @@ let Home = ({ navigation }) => {
       }
 
       <StatusBar style="auto" />
-
     </ScrollView >
   );
 };

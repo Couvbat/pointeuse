@@ -7,7 +7,6 @@ import {
   Text,
   View,
   Pressable,
-  RefreshControl,
 } from "react-native";
 import { useQuery } from "react-query";
 import { getTimestamp, deleteTimestamp } from "../../../utils/Api";
@@ -20,7 +19,14 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Icons from '@expo/vector-icons/FontAwesome5';
 
-let Timestamp = ({ route, navigation }) => {
+/**
+ * Renders the details of a timestamp.
+ *
+ * @param {Object} route - The route object containing the parameters.
+ * @param {Object} navigation - The navigation object.
+ * @returns {JSX.Element} - The JSX element representing the details of the timestamp.
+ */
+let Details = ({ route, navigation }) => {
 
   const { isFetching, error, data } = useQuery(
     "Timestamp",
@@ -264,4 +270,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Timestamp;
+export default Details;
