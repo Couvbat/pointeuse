@@ -34,9 +34,13 @@ J'utilises les packages Node suivants :
   - React-navigation (pour gérer les pages)
   - React-Query avec Axios (pour gérer les requêtes api)
   - React-icons (pour les icônes)
-  - React-native-date-picker (pour des calendriers)
+  - React-native-date-picker (pour des datepicker)
   - React-timer-hook (pour le timer)
-
+  
+Je dois encore implémenter les packages suivants :
+  - react-native-paper (pour le design)
+  - react-native-calendars (pour le calendrier)
+  - react-native-pdf (pour l'export pdf)
 ## Installation
 
 - Pré-requis :
@@ -64,7 +68,8 @@ J'utilises les packages Node suivants :
 - [x] ~~Créer les models/controllers/migrations/routes de l'API~~
 - [x] ~~Créer un projet React Native~~
 - [x] ~~Créer une interface basique~~
-- [ ] Stopwatch depuis le dernier pointage
-- [ ] Recap journées
-- [ ] Recap mois
+- [x] ~~Enregistrer les données dans la base de données~~
+- [x] ~~Stopwatch depuis le dernier pointage~~
+- [ ] rework interface avec react-native-paper
+- [ ] Calendrier avec recap des mois et des journées
 - [ ] Export pdf ou csv

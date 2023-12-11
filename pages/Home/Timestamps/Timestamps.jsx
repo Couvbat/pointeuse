@@ -23,10 +23,6 @@ let Timestamps = ({ navigation }) => {
   const [type, setType] = useState('trajet');
   const [dateTime, setDateTime] = useState(new Date()); // Single state for date and time
 
-  const handleDetails = (id) => {
-    navigation.navigate("Timestamp", { id: id });
-  };
-
   const deactivateLastTimestamp = useMutation(
     lastTimestamp => updateTimestamp(lastTimestamp.id, { isActive: '0' }),
     {
