@@ -8,13 +8,15 @@ import {
   Text,
   View,
 } from "react-native";
-import { useQuery } from "react-query";
+import { useQueryClient, useQuery } from "react-query";
 import TimerTab from "../components/TimerTab";
 import StopButton from "../components/StopButton";
 import { getLastTimestamp } from "../../utils/Api";
 import Icons from '@expo/vector-icons/FontAwesome5';
+import { useFocusEffect } from '@react-navigation/native';
 
 let Home = ({ navigation }) => {
+  const queryClient = useQueryClient();
 
   const [lastTimestamp, setLastTimestamp] = useState();
   const [isRunning, setIsRunning] = useState(false);
@@ -22,14 +24,22 @@ let Home = ({ navigation }) => {
   const { refetch, isFetching } = useQuery('LastTimestamp', getLastTimestamp, {
     onSettled: (data) => {
       console.log('Query settled with data:', data); // Add this for debugging
-      if (data) {
-        setLastTimestamp(data);
-        if (data.isActive == '1') {
-          setIsRunning(true);
-        }
+      setIsRunning(false);
+      setLastTimestamp(data);
+      if (data !== undefined && data.isActive == '1') {
+        setIsRunning(true);
       }
-    },
+    }
   });
+
+  useFocusEffect(
+    React.useCallback(() => {
+      setIsRunning(false);
+      queryClient.invalidateQueries('LastTimestamp');
+      queryClient.invalidateQueries('Timestamps');
+      refetch();
+    }, [refetch])
+  );
 
 
   return (

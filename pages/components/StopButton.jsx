@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, View, Text, Pressable } from "react-native";
-import { getLastTimestamp, updateTimestamp } from "../../utils/Api";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { updateTimestamp } from "../../utils/Api";
+import { useMutation, useQueryClient } from "react-query";
 
 const StopButton = ({ lastTimestamp, setIsRunning }) => {
   const queryClient = useQueryClient();
 
-  const mutation = useMutation(() => updateTimestamp(lastTimestamp.id, { isActive: false }), {
+  const mutation = useMutation(() => updateTimestamp(lastTimestamp.id, { isActive: '0' }), {
     onSuccess: () => {
       // Invalidate and refetch queries after the mutation succeeds
       queryClient.invalidateQueries('LastTimestamp');
+      queryClient.invalidateQueries('Timestamps');
       setIsRunning(false);
     },
     onError: (error) => {

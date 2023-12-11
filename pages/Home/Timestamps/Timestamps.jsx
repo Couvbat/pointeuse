@@ -5,7 +5,7 @@ import { createTimestamp, getLastTimestamp, updateTimestamp, getTimestamps } fro
 import { formatDateTimeAsDate, formatDateTimeAsTime } from "../../../utils/dateFormating";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Icons from '@expo/vector-icons/FontAwesome5';
-
+import { useFocusEffect } from '@react-navigation/native';
 
 let Timestamps = ({ navigation }) => {
   const queryClient = useQueryClient();
@@ -13,6 +13,14 @@ let Timestamps = ({ navigation }) => {
   // Fetching timestamps for display
   const { refetch, isFetching, error, data } = useQuery("Timestamps", getTimestamps);
   const timestamps = data || [];
+
+  useFocusEffect(
+    React.useCallback(() => {
+      queryClient.invalidateQueries('LastTimestamp');
+      queryClient.invalidateQueries('Timestamps');
+      refetch();
+    }, [refetch])
+  );
 
   // State for managing modal and date-time picker visibility
   const [modalVisible, setModalVisible] = useState(false);
@@ -39,6 +47,7 @@ let Timestamps = ({ navigation }) => {
     {
       onSuccess: () => {
         setModalVisible(false);
+        queryClient.invalidateQueries('LastTimestamp');
         queryClient.invalidateQueries('Timestamps');
       },
       // onError can be defined to handle errors
@@ -95,7 +104,7 @@ let Timestamps = ({ navigation }) => {
         onRequestClose={toggleModal}
       >
         <View style={styles.modalView}>
-        <View style={styles.modalItem}>
+          <View style={styles.modalItem}>
             <Text style={styles.modalText}>Type de Timestamp :</Text>
             <View style={styles.row}>
               <Pressable
@@ -191,7 +200,7 @@ let Timestamps = ({ navigation }) => {
           </Pressable>
         )}
         refreshControl={
-          <RefreshControl refreshing={isFetching} onRefresh={refetch}/>
+          <RefreshControl refreshing={isFetching} onRefresh={refetch} />
         }
       />
 

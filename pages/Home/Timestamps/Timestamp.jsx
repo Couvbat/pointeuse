@@ -9,10 +9,9 @@ import {
   Pressable,
   RefreshControl,
 } from "react-native";
-import { useQuery, useMutation, useQueryClient, QueryClient } from "react-query";
-import { getTimestamp, updateTimestamp, deleteTimestamp } from "../../../utils/Api";
+import { useQuery } from "react-query";
+import { getTimestamp, deleteTimestamp } from "../../../utils/Api";
 import {
-  formatDateTime,
   formatDate,
   formatTime,
   convertDateFormat,
@@ -22,8 +21,6 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import Icons from '@expo/vector-icons/FontAwesome5';
 
 let Timestamp = ({ route, navigation }) => {
-
-  const queryClient = useQueryClient();
 
   const { isFetching, error, data } = useQuery(
     "Timestamp",
@@ -73,7 +70,6 @@ let Timestamp = ({ route, navigation }) => {
           text: "Supprimer",
           onPress: () => {
             deleteTimestamp(id);
-            queryClient.invalidateQueries("Timestamps");
             navigation.goBack();
           },
         },
