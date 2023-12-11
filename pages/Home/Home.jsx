@@ -24,7 +24,7 @@ let Home = ({ navigation }) => {
       console.log('Query settled with data:', data); // Add this for debugging
       if (data) {
         setLastTimestamp(data);
-        if (data.isActive == 1) {
+        if (data.isActive == '1') {
           setIsRunning(true);
         }
       }

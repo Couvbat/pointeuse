@@ -4,7 +4,7 @@ import { useStopwatch } from 'react-timer-hook';
 
 const TimerTab = ({ lastTimestamp }) => {
   // If the last timestamp is not active, don't display the timer
-  if (!lastTimestamp || lastTimestamp.isActive === 0) {
+  if (!lastTimestamp || lastTimestamp.isActive == '0' || lastTimestamp.type == undefined) {
     return null;
   }
 

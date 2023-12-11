@@ -28,7 +28,7 @@ let Timestamps = ({ navigation }) => {
   };
 
   const deactivateLastTimestamp = useMutation(
-    lastTimestamp => updateTimestamp(lastTimestamp.id, { isActive: false }),
+    lastTimestamp => updateTimestamp(lastTimestamp.id, { isActive: '0' }),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('LastTimestamp');
@@ -73,7 +73,7 @@ let Timestamps = ({ navigation }) => {
     // The following getLastTimestamp() logic should really be a part of creating new timestamps,
     // potentially implemented as a transaction on the backend side.
     getLastTimestamp().then((lastTimestamp) => {
-      if (lastTimestamp && lastTimestamp.isActive === 1) {
+      if (lastTimestamp && lastTimestamp.isActive == '1') {
         deactivateLastTimestamp.mutate(lastTimestamp);
       }
     });
@@ -82,7 +82,7 @@ let Timestamps = ({ navigation }) => {
     const newTimestamp = {
       type: type,
       dateTime: formattedDateTime,
-      isActive: 1,
+      isActive: '1',
     };
     addTimestampMutation.mutate(newTimestamp);
   };
