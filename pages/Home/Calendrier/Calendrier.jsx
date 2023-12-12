@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, FlatList, ScrollView } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { useQuery, useQueryClient } from "react-query";
 import { getTimestampsByDate } from "../../../utils/Api";
-import { formatCalendarDate,calculateDuration } from "../../../utils/dateFormating";
+import { formatCalendarDate, calculateDuration, calculateDurations, convertToTimeFormat } from "../../../utils/dateFormating";
 
 LocaleConfig.locales['fr'] = {
   monthNames: [
@@ -50,6 +50,7 @@ let Calendrier = ({ navigation }) => {
       },
     }
   );
+  const dailyDurations = calculateDurations(timestamps);
 
   return (
     <View style={styles.container}>
@@ -73,17 +74,33 @@ let Calendrier = ({ navigation }) => {
           [selectedDay]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
         }}
       />
-      <View>
-        <Text style={styles.text}>Selected date: {selectedDay}</Text>
-        {!isFetching && timestamps && timestamps.length > 0 &&
-          <>
-            <Text style={styles.text}>Timestamps nb: {timestamps.length}</Text>
-            <Text style={styles.text}>Timestamps ids: {timestamps.map(timestamp => `${timestamp.id},`)}</Text>
-            <Text style={styles.text}>Timestamps duree: {timestamps.map(timestamp => `${calculateDuration(timestamp.created_at,timestamp.updated_at)},`)}</Text>
-          </>
-        }
+      <View style={styles.container}>
+        {isFetching && <Text style={styles.text}>Récupération des données.</Text>}
+        {error && <Text style={styles.text}>Erreur lors de la récupération des données.</Text>}
+        {timestamps && timestamps.length === 0 && !isFetching && <Text style={styles.text}>Aucun timestamps à cette date.</Text>}
+
+        {!isFetching && timestamps && timestamps.length > 0 && (
+          <FlatList
+            data={timestamps}
+            keyExtractor={(_, index) => index.toString()} // Removed unused 'item' variable
+            renderItem={({ item }) => (
+              <View style={styles.listItem}>
+                <Text style={styles.text}>
+                  {convertToTimeFormat(item.dateTime)} : {item.type} : {calculateDuration(item.created_at, item.updated_at)}
+                </Text>
+              </View>
+            )}
+            ListHeaderComponent={ // Use ListHeaderComponent to render the summary that will be fixed at the top
+              <View style={styles.listItem}>
+                <Text style={styles.text}>total trajet : {dailyDurations.trajet}</Text>
+                <Text style={styles.text}>total travaux : {dailyDurations.travaux}</Text>
+                <Text style={styles.text}>total pause : {dailyDurations.pause}</Text>
+              </View>
+            }
+          />
+        )}
       </View>
-    </View>
+    </View> // Added closing tag for View
   );
 };
 
@@ -95,6 +112,22 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     color: "white",
+  },
+  listItem: {
+    backgroundColor: "#46468C",
+    margin: 8,
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+    // shadow
+    shadowColor: "black",
+    shadowOffset: {
+      width: 4,
+      height: 4,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 5,
+    elevation: 8,
   },
 });
 

@@ -234,9 +234,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
   },
-  list: {
-    flex: 1,
-  },
   listItem: {
     backgroundColor: "#46468C",
     margin: 8,

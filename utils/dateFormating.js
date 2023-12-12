@@ -71,3 +71,58 @@ export function formatCalendarDate(date) {
 
   return `${year}-${month}-${day}`;
 }
+
+export function calculateDurations(timestamps) {
+  const totalDurationsInSeconds = { travaux: 0, trajet: 0, pause: 0 };
+
+  timestamps.forEach((timestamp, index) => {
+      const startTime = new Date(timestamp.created_at);
+      let endTime;
+
+      if (index === timestamps.length - 1 && timestamp.isActive === "1") {
+          endTime = new Date(); // Current time for active last timestamp
+      } else if (index < timestamps.length - 1) {
+          endTime = new Date(timestamps[index + 1].created_at); // Start time of the next timestamp
+      } else {
+          endTime = new Date(timestamp.updated_at); // End time of the current timestamp
+      }
+
+      // Calculate duration in seconds
+      if (endTime) {
+          const durationSeconds = (endTime - startTime) / 1000;
+
+          // Add the duration to the total for the appropriate type
+          if (totalDurationsInSeconds.hasOwnProperty(timestamp.type)) {
+              totalDurationsInSeconds[timestamp.type] += durationSeconds;
+          }
+      }
+  });
+
+  // Convert total durations from seconds to HH:MM:SS
+  const totalDurationsFormatted = {};
+  Object.keys(totalDurationsInSeconds).forEach(type => {
+      const totalSeconds = totalDurationsInSeconds[type];
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = Math.floor(totalSeconds % 60);
+
+      totalDurationsFormatted[type] = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  });
+
+  return totalDurationsFormatted;
+}
+
+export function convertToTimeFormat(dateTimeStr) {
+  // Parse the date string
+  const [day, month, yearAndTime] = dateTimeStr.split("/");
+  const [year, time] = yearAndTime.split(" ");
+  const [hours, minutes, seconds] = time.split(":");
+
+  // Create a new Date object
+  const date = new Date(year, month - 1, day, hours, minutes, seconds);
+
+  // Format the time
+  const formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+
+  return formattedTime;
+}
