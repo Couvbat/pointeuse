@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { useQuery, useQueryClient } from "react-query";
 import { getTimestampsByDate } from "../../../utils/Api";
-import { formatCalendarDate } from "../../../utils/dateFormating";
+import { formatCalendarDate,calculateDuration } from "../../../utils/dateFormating";
 
 LocaleConfig.locales['fr'] = {
   monthNames: [
@@ -27,19 +27,30 @@ LocaleConfig.locales['fr'] = {
 };
 LocaleConfig.defaultLocale = 'fr';
 
-let Calendrier = () => {
-  const [selected, setSelected] = useState(formatCalendarDate(new Date()));
+let Calendrier = ({ navigation }) => {
+
+  const queryClient = useQueryClient();
+  const [selectedDay, setSelectedDay] = useState(formatCalendarDate(new Date())); // This will hold the selected day
+  const [timestamps, setTimestamps] = useState([]); // This will hold the timestamps for the selected day
+
+  console.log('init selected day:', selectedDay)
+  console.log('init timestamps:', timestamps)
+
   const { refetch, isFetching, error, data } = useQuery(
-    "TimestampsByDate",
-    () => getTimestampsByDate(selected),
+    ["TimestampsByDate", selectedDay],
+    ({ queryKey }) => getTimestampsByDate(queryKey[1]),
     {
-      onSettled: (data) => {
-        console.log('Query settled with data:', data); // Add this for debugging
-        console.log(selected)
-      }
+      onSettled: (data, error) => { // Add error parameter to the callback for debugging
+        console.log('Query settled with data:', data);
+        if (data) setTimestamps(data); // We check if data is not undefined before setting the state
+        console.log('Query error:', error);
+      },
+      onError: (err) => {
+        console.error('Query error:', err); // Print error if any
+      },
     }
   );
-  const timestamps = data || [];
+
   return (
     <View style={styles.container}>
       <Calendar
@@ -48,17 +59,29 @@ let Calendrier = () => {
         onMonthChange={(month) => { console.log('month changed', month) }
         }
         onDayPress={day => {
-          setSelected(day.dateString);
-          refetch()
+          queryClient.invalidateQueries(["TimestampsByDate", day.dateString]);
+          setSelectedDay(day.dateString);
+          getTimestampsByDate(day.dateString)
+            .then(data => {
+              setTimestamps(data); // This will update the timestamps state with the new data
+            })
+            .catch(error => {
+              console.error(error);
+            });
         }}
         markedDates={{
-          [selected]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
+          [selectedDay]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
         }}
       />
       <View>
-        <Text style={styles.text}>Selected date: {selected}</Text>
-        <Text style={styles.text}>Timestamps: {timestamps.length}</Text>
-        <Text style={styles.text}>Timestamps: {timestamps.map(timestamp => timestamp.id)}</Text>
+        <Text style={styles.text}>Selected date: {selectedDay}</Text>
+        {!isFetching && timestamps && timestamps.length > 0 &&
+          <>
+            <Text style={styles.text}>Timestamps nb: {timestamps.length}</Text>
+            <Text style={styles.text}>Timestamps ids: {timestamps.map(timestamp => `${timestamp.id},`)}</Text>
+            <Text style={styles.text}>Timestamps duree: {timestamps.map(timestamp => `${calculateDuration(timestamp.created_at,timestamp.updated_at)},`)}</Text>
+          </>
+        }
       </View>
     </View>
   );

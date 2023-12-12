@@ -19,7 +19,11 @@ export function getLastTimestamp() {
 }
 
 export function getTimestampsByDate(date) {
-  return api.get("/timestamps/date/" + date).then((res) => res.data.data);
+  return api.get(`/timestamps/date/${date}`)
+    .then(res => {
+      console.log('Response data:', res.data); // Log the response data
+      return res.data; // Return the data directly without .data.data
+    });
 }
 
 export function createTimestamp(data) {
