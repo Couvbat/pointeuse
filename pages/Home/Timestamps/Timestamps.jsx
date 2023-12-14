@@ -259,18 +259,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  spacer: {
-    width: 32,
-  },
-  row: {
-    marginTop: 16,
-    flexDirection: "row",
-  },
-  DateTimePicker: {
-    fontSize: 20,
-    margin: 10,
-    color: "white",
-  },
 });
 
 export default Timestamps;

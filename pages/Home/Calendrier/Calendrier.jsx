@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { useQuery, useQueryClient } from "react-query";
 import { getTimestampsByMonth } from "../../../utils/Api";
-import { formatCalendarDate, calculateDuration, calculateMonthlyTotalDurations, convertToTimeFormat } from "../../../utils/dateFormating";
+import { formatCalendarDate, calculateMonthlyTotalDurations } from "../../../utils/dateFormating";
 
 LocaleConfig.locales['fr'] = {
   monthNames: [
@@ -58,7 +58,7 @@ let Calendrier = ({ navigation }) => {
       <Calendar
         style={{
           margin: 10,
-          height: 400,
+          height: 380,
           borderRadius: 20
         }}
         hideExtraDays={true}
@@ -84,9 +84,7 @@ let Calendrier = ({ navigation }) => {
       <View style={styles.container}>
 
         {isFetching &&
-          <View style={styles.listItem}>
-            <Text style={styles.text}>Récupération des données.</Text>
-          </View>
+          <Text style={styles.loading}>Chargement...</Text>
         }
         {error &&
           <View style={styles.listItem}>
@@ -96,7 +94,7 @@ let Calendrier = ({ navigation }) => {
 
         {timestamps && timestamps.length === 0 && !isFetching &&
           <View style={styles.listItem}>
-            <Text style={styles.text}>Aucun timestamps à cette date.</Text>
+            <Text style={styles.text}>Il n'y a pas encore de Timestamp a cette date.</Text>
           </View>
         }
 
@@ -138,6 +136,13 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 8,
   },
+  loading: {
+    marginVertical: 20,
+    color: "white",
+    fontSize: 20,
+    textAlign: "center",
+  },
+
 });
 
 export default Calendrier;

@@ -135,7 +135,7 @@ let Details = ({ route, navigation }) => {
 
       <Button
         title="Supprimer"
-        color="#B30000"
+        color="#FF0000"
         onPress={() => {
           handleDeleteTimestamp(Timestamp.id);
         }}
@@ -198,18 +198,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-  },
-  DateTimePicker: {
-    fontSize: 20,
-    margin: 10,
-    color: "white",
-  },
-  spacer: {
-    width: 64,
-  },
-  row: {
-    marginTop: 16,
-    flexDirection: "row",
   },
 });
 

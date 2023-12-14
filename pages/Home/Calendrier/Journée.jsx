@@ -52,10 +52,10 @@ let Journée = ({ route, navigation }) => {
               <Text style={styles.text}>total travaux : {dailyDurations.travaux}</Text>
               <Text style={styles.text}>total pause : {dailyDurations.pause}</Text>
             </View>
-
+            {isFetching && <Text style={styles.loading}>Chargement...</Text>}
             {timestamps.length === 0 && !isFetching && (
               <View style={styles.listItem}>
-                <Text style={styles.text}>Il n'y a pas encore de Timestamps</Text>
+                <Text style={styles.text}>Il n'y a pas encore de Timestamps a cette date</Text>
               </View>
             )}
           </>
@@ -89,6 +89,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 5,
     elevation: 8,
+  },
+  loading: {
+    color: "white",
+    fontSize: 20,
+    textAlign: "center",
+    marginTop: 20,
   },
 });
 
