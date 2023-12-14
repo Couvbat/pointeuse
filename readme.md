@@ -34,13 +34,9 @@ J'utilises les packages Node suivants :
   - React-navigation (pour gérer les pages)
   - React-Query avec Axios (pour gérer les requêtes api)
   - React-icons (pour les icônes)
-  - React-native-date-picker (pour des datepicker)
   - React-timer-hook (pour le timer)
-  
-Je dois encore implémenter les packages suivants :
-  - react-native-paper (pour le design)
   - react-native-calendars (pour le calendrier)
-  - react-native-pdf (pour l'export pdf)
+  
 ## Installation
 
 - Pré-requis :
