@@ -71,6 +71,5 @@ Je dois encore implémenter les packages suivants :
 - [x] ~~Enregistrer les données dans la base de données~~
 - [x] ~~Stopwatch depuis le dernier pointage~~
 - [x] ~~Calendrier avec recap des journées~~
-- [ ] Calendrier avec recap des mois
-- [ ] rework interface avec react-native-paper
+- [x] ~~Calendrier avec recap des mois~~
 - [ ] Export pdf ou csv

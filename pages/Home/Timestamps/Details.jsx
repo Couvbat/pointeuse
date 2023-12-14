@@ -16,7 +16,6 @@ import {
   convertDateFormat,
   calculateDuration
 } from "../../../utils/dateFormating";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import Icons from '@expo/vector-icons/FontAwesome5';
 
 /**
@@ -27,7 +26,7 @@ import Icons from '@expo/vector-icons/FontAwesome5';
  * @returns {JSX.Element} - The JSX element representing the details of the timestamp.
  */
 let Details = ({ route, navigation }) => {
-
+  console.log("Details route.params.id:", route.params.id);
   const { isFetching, error, data } = useQuery(
     "Timestamp",
     () => getTimestamp(route.params.id),
@@ -35,33 +34,14 @@ let Details = ({ route, navigation }) => {
       onSettled: (data) => {
         setType(data.type);
         const formattedDate = convertDateFormat(data.created_at);
-        const dateParts = formattedDate.split(' ')[0].split('/');
-        const timeParts = formattedDate.split(' ')[1].split(':');
-        setDate(dateParts.join('/'));
-        setTime(timeParts.join(':'));
-        setDateTimeOBJ(
-          new Date(
-            parseInt(dateParts[2]),
-            parseInt(dateParts[1]) - 1,
-            parseInt(dateParts[0]),
-            parseInt(timeParts[0]),
-            parseInt(timeParts[1]),
-            parseInt(timeParts[2])
-          )
-        );
       },
     }
   );
   const Timestamp = data || [];
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [timePickerVisible, setTimePickerVisible] = useState(false);
 
   const [type, setType] = useState(Timestamp.type);
-  const [date, setDate] = useState(Timestamp.date);
-  const [time, setTime] = useState(Timestamp.time);
-  const [dateTimeOBJ, setDateTimeOBJ] = useState();
 
   const handleDeleteTimestamp = (id) => {
     Alert.alert(
@@ -81,16 +61,6 @@ let Details = ({ route, navigation }) => {
         },
       ]
     );
-  };
-
-  const handleDate = (_event, selectedDate) => {
-    setDatePickerVisible(false);
-    setDate(formatDate(selectedDate));
-  };
-
-  const handleTime = (_event, selectedTime) => {
-    setTimePickerVisible(false);
-    setTime(formatTime(selectedTime));
   };
 
   return (
@@ -148,46 +118,19 @@ let Details = ({ route, navigation }) => {
               </Pressable>
             </View>
           </View>
-          <Pressable
-            style={styles.modalItem}
-            onPress={() => {
-              setDatePickerVisible(true);
-            }}
-          >
-            <Text style={styles.DateTimePicker}>{date}</Text>
-          </Pressable>
-          {datePickerVisible && (
-            <DateTimePicker
-              mode="date"
-              value={dateTimeOBJ}
-              onChange={handleDate}
-            />
-          )}
-
-          <Pressable
-            style={styles.modalItem}
-            onPress={() => {
-              setTimePickerVisible(true);
-            }}
-          >
-            <Text style={styles.DateTimePicker}>{time}</Text>
-          </Pressable>
-          {timePickerVisible && (
-            <DateTimePicker
-              mode="time"
-              value={dateTimeOBJ}
-              onChange={handleTime}
-            />
-          )}
         </View>
       </Modal>
 
       <View style={styles.box}>
         <Text style={styles.text}>Type : {Timestamp.type}</Text>
         <Text style={styles.text}>Date : {convertDateFormat(Timestamp.created_at).split(' ')[0]}</Text>
-        <Text style={styles.text}>Heure début: {convertDateFormat(Timestamp.created_at).split(' ')[1]}</Text>
-        <Text style={styles.text}>Heure fin: {convertDateFormat(Timestamp.updated_at).split(' ')[1]}</Text>
-        <Text style={styles.text}>durée: {calculateDuration(Timestamp.created_at, Timestamp.updated_at)}</Text>
+        <Text style={styles.text}>Heure début : {convertDateFormat(Timestamp.created_at).split(' ')[1]}</Text>
+        {Timestamp.updated_at && Timestamp.updated_at !== Timestamp.created_at &&
+          <>
+            <Text style={styles.text}>Heure fin : {convertDateFormat(Timestamp.updated_at).split(' ')[1]}</Text>
+            <Text style={styles.text}>durée: {calculateDuration(Timestamp.created_at, Timestamp.updated_at)}</Text>
+          </>
+        }
       </View>
 
       <Button

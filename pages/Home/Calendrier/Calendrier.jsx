@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, FlatList, ScrollView } from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { useQuery, useQueryClient } from "react-query";
-import { getTimestampsByDate } from "../../../utils/Api";
-import { formatCalendarDate, calculateDuration, calculateDurations, convertToTimeFormat } from "../../../utils/dateFormating";
+import { getTimestampsByMonth } from "../../../utils/Api";
+import { formatCalendarDate, calculateDuration, calculateMonthlyTotalDurations, convertToTimeFormat } from "../../../utils/dateFormating";
 
 LocaleConfig.locales['fr'] = {
   monthNames: [
@@ -30,15 +30,15 @@ LocaleConfig.defaultLocale = 'fr';
 let Calendrier = ({ navigation }) => {
 
   const queryClient = useQueryClient();
-  const [selectedDay, setSelectedDay] = useState(formatCalendarDate(new Date())); // This will hold the selected day
-  const [timestamps, setTimestamps] = useState([]); // This will hold the timestamps for the selected day
+  const [selectedMonth, setSelectedMonth] = useState(formatCalendarDate(new Date())); // This will hold the selected day
+  const [timestamps, setTimestamps] = useState([]); // This will hold the timestamps for the selected month
 
-  console.log('init selected day:', selectedDay)
+  console.log('init selected day:', selectedMonth)
   console.log('init timestamps:', timestamps)
 
   const { refetch, isFetching, error, data } = useQuery(
-    ["TimestampsByDate", selectedDay],
-    ({ queryKey }) => getTimestampsByDate(queryKey[1]),
+    ["TimestampsByMonth", selectedMonth],
+    ({ queryKey }) => getTimestampsByMonth(queryKey[1]),
     {
       onSettled: (data, error) => { // Add error parameter to the callback for debugging
         console.log('Query settled with data:', data);
@@ -50,54 +50,63 @@ let Calendrier = ({ navigation }) => {
       },
     }
   );
-  const dailyDurations = calculateDurations(timestamps);
+
+  const monthlyDurations = calculateMonthlyTotalDurations(timestamps);
 
   return (
     <View style={styles.container}>
       <Calendar
+        style={{
+          margin: 10,
+          height: 400,
+          borderRadius: 20
+        }}
         hideExtraDays={true}
         enableSwipeMonths={true}
-        onMonthChange={(month) => { console.log('month changed', month) }
-        }
-        onDayPress={day => {
-          queryClient.invalidateQueries(["TimestampsByDate", day.dateString]);
-          setSelectedDay(day.dateString);
-          getTimestampsByDate(day.dateString)
+        onMonthChange={(month) => {
+          console.log('month changed', month)
+          queryClient.invalidateQueries(["TimestampsByMonth", month.dateString]);
+          setSelectedMonth(month.dateString);
+          getTimestampsByMonth(month.dateString)
             .then(data => {
               setTimestamps(data); // This will update the timestamps state with the new data
             })
             .catch(error => {
               console.error(error);
             });
-        }}
+        }
+        }
+        onDayLongPress={(day) => navigation.navigate("Journée", { day: day.dateString })}
         markedDates={{
-          [selectedDay]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' }
+          [selectedMonth]: { selected: true, disableTouchEvent: false, selectedDotColor: 'orange' }
         }}
       />
       <View style={styles.container}>
-        {isFetching && <Text style={styles.text}>Récupération des données.</Text>}
-        {error && <Text style={styles.text}>Erreur lors de la récupération des données.</Text>}
-        {timestamps && timestamps.length === 0 && !isFetching && <Text style={styles.text}>Aucun timestamps à cette date.</Text>}
+
+        {isFetching &&
+          <View style={styles.listItem}>
+            <Text style={styles.text}>Récupération des données.</Text>
+          </View>
+        }
+        {error &&
+          <View style={styles.listItem}>
+            <Text style={styles.text}>Erreur lors de la récupération des données.</Text>
+          </View>
+        }
+
+        {timestamps && timestamps.length === 0 && !isFetching &&
+          <View style={styles.listItem}>
+            <Text style={styles.text}>Aucun timestamps à cette date.</Text>
+          </View>
+        }
 
         {!isFetching && timestamps && timestamps.length > 0 && (
-          <FlatList
-            data={timestamps}
-            keyExtractor={(_, index) => index.toString()} // Removed unused 'item' variable
-            renderItem={({ item }) => (
-              <View style={styles.listItem}>
-                <Text style={styles.text}>
-                  {convertToTimeFormat(item.dateTime)} : {item.type} : {calculateDuration(item.created_at, item.updated_at)}
-                </Text>
-              </View>
-            )}
-            ListHeaderComponent={ // Use ListHeaderComponent to render the summary that will be fixed at the top
-              <View style={styles.listItem}>
-                <Text style={styles.text}>total trajet : {dailyDurations.trajet}</Text>
-                <Text style={styles.text}>total travaux : {dailyDurations.travaux}</Text>
-                <Text style={styles.text}>total pause : {dailyDurations.pause}</Text>
-              </View>
-            }
-          />
+          <View style={styles.listItem}>
+            <Text style={styles.text}>Total du mois :</Text>
+            <Text style={styles.text}>trajet : {monthlyDurations.trajet}</Text>
+            <Text style={styles.text}>travaux : {monthlyDurations.travaux}</Text>
+            <Text style={styles.text}>pause : {monthlyDurations.pause}</Text>
+          </View>
         )}
       </View>
     </View> // Added closing tag for View

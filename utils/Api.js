@@ -1,5 +1,9 @@
 import axios from "axios";
 
+/**
+ * Axios instance for making API requests.
+ * @type {import("axios").AxiosInstance}
+ */
 const api = axios.create({
   baseURL: "https://jhemery.xyz/api",
   params: { api_token: "5kRKw5UaRVuxCl8qjNSrT2PeQ5RRka3nFhILKtjCuCXUt5M5775oqjVao00guMMqnrsOvIbHDQAhBAAHk2xgEN9c7XSn2wgpcz5u" },
@@ -21,9 +25,12 @@ export function getLastTimestamp() {
 export function getTimestampsByDate(date) {
   return api.get(`/timestamps/date/${date}`)
     .then(res => {
-      console.log('Response data:', res.data); // Log the response data
-      return res.data; // Return the data directly without .data.data
+      return res.data; // Return the data directly 
     });
+}
+
+export function getTimestampsByMonth(date) {
+  return api.get(`/timestamps/month/${date}`).then((res) => res.data);
 }
 
 export function createTimestamp(data) {
@@ -36,33 +43,4 @@ export function updateTimestamp(id, data) {
 
 export function deleteTimestamp(id) {
   return api.delete("/timestamp/" + id).then((res) => res.data.data);
-}
-
-//Profile
-export function getProfile() {
-  return api.get("/profile").then((res) => res.data.data);
-}
-
-export function updateProfile(data) {
-  return api.patch("/profile", data).then((res) => res.data.data);
-}
-
-//Login
-export function login(data) {
-  return api.post("/login", data).then((res) => res.data.data);
-}
-
-//Register
-export function register(data) {
-  return api.post("/register", data).then((res) => res.data.data);
-}
-
-//Logout
-export function logout() {
-  return api.get("/logout").then((res) => res.data.data);
-}
-
-//User
-export function getUser(id) {
-  return api.get("/user/" + id).then((res) => res.data.data);
 }

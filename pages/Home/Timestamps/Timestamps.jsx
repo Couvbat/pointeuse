@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, Modal, Button, FlatList, RefreshControl, Pressa
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import { createTimestamp, getLastTimestamp, updateTimestamp, getTimestamps } from "../../../utils/Api";
 import { formatDateTimeAsDate, formatDateTimeAsTime } from "../../../utils/dateFormating";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import Icons from '@expo/vector-icons/FontAwesome5';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -31,8 +30,6 @@ let Timestamps = ({ navigation }) => {
 
   // State for managing modal and date-time picker visibility
   const [modalVisible, setModalVisible] = useState(false);
-  const [datePickerVisible, setDatePickerVisible] = useState(false);
-  const [timePickerVisible, setTimePickerVisible] = useState(false);
 
   // State for managing selected timestamp details
   const [type, setType] = useState('trajet');
@@ -61,19 +58,7 @@ let Timestamps = ({ navigation }) => {
     }
   );
 
-  const handleDateChange = (_event, selectedDate) => {
-    const currentDate = selectedDate || dateTime;
-    setDateTime(currentDate);
-    setDatePickerVisible(false);
-  };
-
-  const handleTimeChange = (_event, selectedTime) => {
-    const currentTime = selectedTime || dateTime;
-    setDateTime(currentTime);
-    setTimePickerVisible(false);
-  };
-
-  const toggleModal = () => {
+   const toggleModal = () => {
     setModalVisible(!modalVisible);
 
     if (!modalVisible) { // When opening the modal, set dateTime to now
@@ -151,37 +136,12 @@ let Timestamps = ({ navigation }) => {
               </Pressable>
             </View>
           </View>
-          {/* Date Picker */}
-          <Pressable
-            style={styles.modalItem}
-            onPress={() => setDatePickerVisible(true)}
-          >
-            <Text style={styles.DateTimePicker}>{formatDateTimeAsDate(dateTime)}</Text>
-          </Pressable>
-          {datePickerVisible && (
-            <DateTimePicker
-              mode="date"
-              value={dateTime}
-              onChange={handleDateChange}
-              display="default"
-            />
-          )}
+          <View style={styles.modalItem}>
+            <Text style={styles.text}>Date : {formatDateTimeAsDate(dateTime)}</Text>
+            <Text style={styles.text}>Heure : {formatDateTimeAsTime(dateTime)}</Text>
+          </View>
 
-          {/* Time Picker */}
-          <Pressable
-            style={styles.modalItem}
-            onPress={() => setTimePickerVisible(true)}
-          >
-            <Text style={styles.DateTimePicker}>{formatDateTimeAsTime(dateTime)}</Text>
-          </Pressable>
-          {timePickerVisible && (
-            <DateTimePicker
-              mode="time"
-              value={dateTime}
-              onChange={handleTimeChange}
-              display="default"
-            />
-          )}
+        
 
           {/* Add Button */}
           <Button title="Ajouter" onPress={handleAddTimestamp} />

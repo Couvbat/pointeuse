@@ -10,6 +10,7 @@ import Home from "./pages/Home/Home";
 import Timestamps from "./pages/Home/Timestamps/Timestamps";
 import Details from "./pages/Home/Timestamps/Details";
 import Calendrier from "./pages/Home/Calendrier/Calendrier";
+import Journée from "./pages/Home/Calendrier/Journée";
 
 
 const HomeStack = createStackNavigator();
@@ -20,29 +21,17 @@ function HomeStackScreen() {
         headerTintColor: "white",
         headerStyle: { backgroundColor: "#323264" },
       }}>
-      <HomeStack.Screen name="Acceuil" component={Home}/>
+      <HomeStack.Screen name="Acceuil" component={Home} />
 
       <HomeStack.Screen name="Timestamps" component={Timestamps} />
       <HomeStack.Screen name="Details" component={Details} />
+
       <HomeStack.Screen name="Calendrier" component={Calendrier} />
+      <HomeStack.Screen name="Journée" component={Journée} />
     </HomeStack.Navigator>
   );
 }
 
-import Settings from "./pages/Settings/Settings";
-
-const SettingsStack = createStackNavigator();
-function SettingsStackScreen() {
-  return (
-    <SettingsStack.Navigator
-      screenOptions={{
-        headerTintColor: "white",
-        headerStyle: { backgroundColor: "#323264" },
-      }}>
-      <SettingsStack.Screen name="Settings" component={Settings} />
-    </SettingsStack.Navigator>
-  );
-}
 
 const Tab = createBottomTabNavigator();
 
@@ -66,17 +55,6 @@ export default function App() {
               tabBarLabel: "Home",
               tabBarIcon: ({ color }) => (
                 <MaterialCommunityIcons name="home" size={24} color={color} />
-              ),
-              headerShown: false,
-            }}
-          />
-          <Tab.Screen
-            name="Paramètres"
-            component={SettingsStackScreen}
-            options={{
-              tabBarLabel: "Paramètres",
-              tabBarIcon: ({ color }) => (
-                <MaterialCommunityIcons name="cog" size={24} color={color} />
               ),
               headerShown: false,
             }}

@@ -72,41 +72,46 @@ export function formatCalendarDate(date) {
   return `${year}-${month}-${day}`;
 }
 
-export function calculateDurations(timestamps) {
+/**
+ * Calculates the daily durations for different types of timestamps.
+ * @param {Array} timestamps - An array of timestamp objects.
+ * @returns {Object} - An object containing the total durations formatted as HH:MM:SS for each type of timestamp.
+ */
+export function calculateDailyDurations(timestamps) {
   const totalDurationsInSeconds = { travaux: 0, trajet: 0, pause: 0 };
 
   timestamps.forEach((timestamp, index) => {
-      const startTime = new Date(timestamp.created_at);
-      let endTime;
+    const startTime = new Date(timestamp.created_at);
+    let endTime;
 
-      if (index === timestamps.length - 1 && timestamp.isActive === "1") {
-          endTime = new Date(); // Current time for active last timestamp
-      } else if (index < timestamps.length - 1) {
-          endTime = new Date(timestamps[index + 1].created_at); // Start time of the next timestamp
-      } else {
-          endTime = new Date(timestamp.updated_at); // End time of the current timestamp
+    if (index === timestamps.length - 1 && timestamp.isActive === "1") {
+      endTime = new Date(); // Current time for active last timestamp
+    } else if (index < timestamps.length - 1) {
+      endTime = new Date(timestamps[index + 1].created_at); // Start time of the next timestamp
+    } else {
+      endTime = new Date(timestamp.updated_at); // End time of the current timestamp
+    }
+
+    // Calculate duration in seconds
+    if (endTime) {
+      const durationSeconds = (endTime - startTime) / 1000;
+
+      // Add the duration to the total for the appropriate type
+      if (totalDurationsInSeconds.hasOwnProperty(timestamp.type)) {
+        totalDurationsInSeconds[timestamp.type] += durationSeconds;
       }
-
-      // Calculate duration in seconds
-      if (endTime) {
-          const durationSeconds = (endTime - startTime) / 1000;
-
-          // Add the duration to the total for the appropriate type
-          if (totalDurationsInSeconds.hasOwnProperty(timestamp.type)) {
-              totalDurationsInSeconds[timestamp.type] += durationSeconds;
-          }
-      }
+    }
   });
 
   // Convert total durations from seconds to HH:MM:SS
   const totalDurationsFormatted = {};
   Object.keys(totalDurationsInSeconds).forEach(type => {
-      const totalSeconds = totalDurationsInSeconds[type];
-      const hours = Math.floor(totalSeconds / 3600);
-      const minutes = Math.floor((totalSeconds % 3600) / 60);
-      const seconds = Math.floor(totalSeconds % 60);
+    const totalSeconds = totalDurationsInSeconds[type];
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = Math.floor(totalSeconds % 60);
 
-      totalDurationsFormatted[type] = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    totalDurationsFormatted[type] = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   });
 
   return totalDurationsFormatted;
@@ -125,4 +130,35 @@ export function convertToTimeFormat(dateTimeStr) {
   const formattedTime = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
 
   return formattedTime;
+}
+
+export function calculateMonthlyTotalDurations(timestamps) {
+  const totalDurationsInSeconds = { trajet: 0, travaux: 0, pause: 0 };
+
+  timestamps.forEach(timestamp => {
+    const type = timestamp.type;
+    let duration = 0;
+
+    if (timestamp.isActive === "1") {
+      duration = (new Date() - new Date(timestamp.created_at)) / 1000; // Active timestamp
+    } else {
+      duration = (new Date(timestamp.updated_at) - new Date(timestamp.created_at)) / 1000;
+    }
+
+    // Add the duration in seconds to the corresponding type
+    totalDurationsInSeconds[type] += duration;
+  });
+
+  // Convert seconds to HH:MM:SS format
+  const totalDurationsFormatted = {};
+  Object.keys(totalDurationsInSeconds).forEach(type => {
+    const totalSeconds = totalDurationsInSeconds[type];
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = Math.floor(totalSeconds % 60);
+
+    totalDurationsFormatted[type] = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  });
+
+  return totalDurationsFormatted;
 }
