@@ -58,7 +58,7 @@ let Timestamps = ({ navigation }) => {
     }
   );
 
-   const toggleModal = () => {
+  const toggleModal = () => {
     setModalVisible(!modalVisible);
 
     if (!modalVisible) { // When opening the modal, set dateTime to now
@@ -141,7 +141,7 @@ let Timestamps = ({ navigation }) => {
             <Text style={styles.text}>Heure : {formatDateTimeAsTime(dateTime)}</Text>
           </View>
 
-        
+
 
           {/* Add Button */}
           <Button title="Ajouter" onPress={handleAddTimestamp} />
